@@ -14,7 +14,16 @@ const LoginHandler = async (req: Request, res: Response) => {
     if (user) {
       const compared = bcrypt.compareSync(password, user.password);
       if (compared) {
-        const token = jwt.sign(user, process.env.JWTSECRET as string);
+        const token = jwt.sign(
+          {
+            username: user.username,
+            email: user.email,
+            id: user.id,
+            role: user.role,
+            created_at: user.created_at,
+          },
+          process.env.JWTSECRET as string
+        );
         return res
           .status(200)
           .json({ message: "successfuly authenticated", token: token });
