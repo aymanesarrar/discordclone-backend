@@ -19,8 +19,10 @@ const RegisterHandler = async (req: Request, res: Response) => {
         username: obj.username,
       },
     });
-    return res.status(200).json(user);
+    return res.status(200).json({ message: "user created successfully" });
   } catch (error: any) {
+    if (error.message.includes("Unique"))
+      return res.status(409).json({ message: "the user already exists" });
     return res.status(400).send(JSON.parse(error.message)[0]);
   }
 };
