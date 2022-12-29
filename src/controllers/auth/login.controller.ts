@@ -26,12 +26,17 @@ const LoginHandler = async (req: Request, res: Response) => {
         );
         return res
           .status(200)
-          .json({ message: "successfuly authenticated", token: token });
+          .json({
+            type: "success",
+            message: "successfuly authenticated",
+            token: token,
+          });
       } else {
         return res.status(401).json({ message: "incorrect password" });
       }
     } else {
       return res.status(404).json({
+        type: "error",
         message:
           "user not found, you can make an account by going to our sign up page",
       });

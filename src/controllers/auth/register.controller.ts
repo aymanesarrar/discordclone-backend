@@ -12,17 +12,21 @@ const RegisterHandler = async (req: Request, res: Response) => {
       password,
     });
 
-    const user = await prisma.user.create({
+    await prisma.user.create({
       data: {
         email: obj.email,
         password: bcrypt.hashSync(obj.password, 3),
         username: obj.username,
       },
     });
-    return res.status(200).json({ message: "user created successfully" });
+    return res
+      .status(200)
+      .json({ type: "success", message: "user created successfully" });
   } catch (error: any) {
     if (error.message.includes("Unique"))
-      return res.status(409).json({ message: "the user already exists" });
+      return res
+        .status(409)
+        .json({ type: "error", message: "the user already exists" });
     return res.status(400).send(JSON.parse(error.message)[0]);
   }
 };
