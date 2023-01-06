@@ -26,7 +26,7 @@ const RegisterHandler = async (req: Request, res: Response) => {
     if (error.message.includes("Unique"))
       return res
         .status(409)
-        .json({ type: "error", message: "the user already exists" });
+        .json({ type: "error", message: "user already exists" });
     return res.status(400).send(JSON.parse(error.message)[0]);
   }
 };

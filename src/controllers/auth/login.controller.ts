@@ -17,20 +17,17 @@ const LoginHandler = async (req: Request, res: Response) => {
         const token = jwt.sign(
           {
             username: user.username,
-            email: user.email,
             id: user.id,
             role: user.role,
             created_at: user.created_at,
           },
           process.env.JWTSECRET as string
         );
-        return res
-          .status(200)
-          .json({
-            type: "success",
-            message: "successfuly authenticated",
-            token: token,
-          });
+        return res.status(200).json({
+          type: "success",
+          message: "successfuly authenticated",
+          token: token,
+        });
       } else {
         return res.status(401).json({ message: "incorrect password" });
       }
