@@ -21,7 +21,8 @@ const LoginHandler = async (req: Request, res: Response) => {
             role: user.role,
             created_at: user.created_at,
           },
-          process.env.JWTSECRET as string
+          process.env.JWTSECRET as string,
+          { expiresIn: "1d" }
         );
         return res.status(200).json({
           type: "success",
