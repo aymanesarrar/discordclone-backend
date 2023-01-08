@@ -64,4 +64,18 @@ const updateProfile = async (req: Request, res: Response) => {
       return res.status(500).send({ type: "error", message: error.message });
   }
 };
-export { createProfile, updateProfile };
+const getProfileByUserId = async (req: Request, res: Response) => {
+  const data = await prisma.profile.findUnique({
+    where: {
+      userId: req.params.id,
+    },
+  });
+  if (!data) {
+    return res
+      .status(404)
+      .send({ type: "error", message: "a profile with this id was not found" });
+  } else {
+    return res.status(200).send({ type: "success", message: "", data });
+  }
+};
+export { createProfile, updateProfile, getProfileByUserId };
