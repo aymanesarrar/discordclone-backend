@@ -56,7 +56,12 @@ const updateProfile = async (req: Request, res: Response) => {
       data: updatedData,
     });
   } catch (error: any) {
-    return res.status(500).send({ type: "error", message: error.message });
+    if (error.message.includes("not found")) {
+      return res
+        .status(404)
+        .send({ type: "error", message: "profile not found" });
+    } else
+      return res.status(500).send({ type: "error", message: error.message });
   }
 };
 export { createProfile, updateProfile };
