@@ -42,4 +42,21 @@ const createProfile = async (req: Request, res: Response) => {
       .send({ type: "error", message: "could not update the user" });
   }
 };
-export { createProfile };
+const updateProfile = async (req: Request, res: Response) => {
+  try {
+    const updatedData = await prisma.profile.update({
+      where: {
+        id: Number(req.params.id),
+      },
+      data: req.body,
+    });
+    return res.status(200).send({
+      type: "success",
+      message: "profile updated successfully",
+      data: updatedData,
+    });
+  } catch (error: any) {
+    return res.status(500).send({ type: "error", message: error.message });
+  }
+};
+export { createProfile, updateProfile };
