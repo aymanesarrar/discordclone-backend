@@ -25,6 +25,7 @@ model User {
   updated_at DateTime @updatedAt
   role       ROLES    @default(USER)
   profile    Profile?
+  completed  Boolean  @default(false)
   friends    Friend[]
 }
 
