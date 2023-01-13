@@ -11,35 +11,48 @@ const createProfile = async (req: Request, res: Response) => {
   if (!user) {
     return res.status(404).send({ type: "error", message: "user not found" });
   }
-  const data = await prisma.profile.create({
-    data: {
-      firstName,
-      lastName,
-      bio,
-      picture,
-      userId: req.params.id,
-    },
-  });
-  if (data) {
-    const updatedUser = await prisma.user.update({
-      where: {
-        id: req.params.id,
-      },
+  try {
+    const data = await prisma.profile.create({
       data: {
-        completed: true,
+        firstName,
+        lastName,
+        bio,
+        picture,
+        userId: req.params.id,
       },
     });
-    if (updatedUser) {
-      return res.status(200).send({
-        type: "success",
-        message: "user updated successfully",
-        data: updatedUser,
+    if (data) {
+      const updatedUser = await prisma.user.update({
+        where: {
+          id: req.params.id,
+        },
+        data: {
+          completed: true,
+        },
       });
+      if (updatedUser) {
+        return res.status(200).send({
+          type: "success",
+          message: "profile created successfully",
+          data: {
+            email: updatedUser.email,
+            completed: updatedUser.completed,
+            created_at: updatedUser.created_at,
+            updated_at: updatedUser.updated_at,
+            username: updatedUser.username,
+            role: updatedUser.role,
+          },
+        });
+      }
+    } else {
+      return res
+        .status(500)
+        .send({ type: "error", message: "could not update the user" });
     }
-  } else {
+  } catch (error) {
     return res
       .status(500)
-      .send({ type: "error", message: "could not update the user" });
+      .send({ type: "error", message: "this user already has a profile" });
   }
 };
 const updateProfile = async (req: Request, res: Response) => {
