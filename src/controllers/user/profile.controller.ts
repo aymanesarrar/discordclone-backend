@@ -57,9 +57,15 @@ const createProfile = async (req: Request, res: Response) => {
 };
 const updateProfile = async (req: Request, res: Response) => {
   try {
+    const profile = await prisma.profile.findUnique({
+      where: {
+        userId: req.params.id,
+      },
+    });
+    if (!profile) throw new Error("could not find a profile with this Id");
     const updatedData = await prisma.profile.update({
       where: {
-        id: Number(req.params.id),
+        userId: req.params.id,
       },
       data: req.body,
     });
