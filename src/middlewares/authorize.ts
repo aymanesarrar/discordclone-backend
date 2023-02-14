@@ -20,6 +20,7 @@ const isLoggedIn = (req: Request, res: Response, next: NextFunction) => {
     if (Date.now() >= decodedJWT?.exp * 1000) {
       return res.status(401).send({ type: "error", message: "unauthorized" });
     }
+    res.locals.username = decodedJWT.username;
     next();
   } catch (error: any) {
     return res.status(401).send({ type: "error", message: error.message });
